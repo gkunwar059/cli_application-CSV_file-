@@ -4,9 +4,9 @@ class TextColors:
     BLUE = '\033[94m'
     YELLOW = '\033[93m'
     RESET = '\033[0m'
-
+import csv
 import sys
-from sampledatabase import DBHandler
+from dbhandler import DBHandler
 
 class Student:
     def __init__(self, first_name, last_name, academy):
@@ -102,8 +102,7 @@ class Student:
                 print(f" Total Enrollment Fee: {self.academy.fee}")
                 print(f" Fee Paid: {student_data['fee_paid']}")
                 print(f" Enrollment Status: {'Enrolled' if not student_data['is_dropout'] else 'Opted Out'}")
-                print(f" First Session Cleared: {student_data['first_session_clear']}")
-                print(f" Second Session Cleared: {student_data['second_session_clear']}")
+                
             else:
                 print("No student found.")    
   
@@ -126,7 +125,7 @@ class Student:
                     if student_data['is_dropout']:
                         print("Already Drop Out")
                     else:
-                        print(TextColors.RED + "\n Admission canceled. 50% refund processed." + TextColors.RESET)
+                        print(TextColors.RED + f"\n Admission canceled.50% refund processed {refund_amount}" + TextColors.RESET)
                 else:
                     print(TextColors.RED + "\n Failed to cancel admission." + TextColors.RESET)
             else:
@@ -187,7 +186,7 @@ if __name__ == "__main__":
     academies = DBHandler.read_academy_data()
 
     for idx, row in enumerate(academies, start=1):
-        print(f" {row['id']} {row['name']} {row['fee']} {row['course']}")
+        print(f" {row[0]} {row[1]} {row[2]} {row[3]}")
 
     academy_choice = get_valid_input(
         TextColors.YELLOW + "\n Enter the number to join the academy:" + TextColors.RESET,
@@ -196,7 +195,7 @@ if __name__ == "__main__":
     )
 
     academy = next(
-        (Academy(row['id'], row['name'], row['fee'], row['course']) for row in academies if int(row['id']) == int(academy_choice)),
+        (Academy(row[0], row[1], row[2], row[3]) for row in academies if int(row[0]) == int(academy_choice)),
         None
     )
 
